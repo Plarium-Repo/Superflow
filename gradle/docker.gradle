@@ -1,0 +1,30 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.bmuschko:gradle-docker-plugin:3.2.5'
+    }
+}
+
+repositories {
+    jcenter()
+}
+
+apply plugin: com.bmuschko.gradle.docker.DockerRemoteApiPlugin
+
+task copyDockerFiles(type: Copy) {
+    description = "Copy Dockerfile and required data to build directory"
+    from 'src/main/docker'
+    from "${project.buildDir}/libs/"
+    into { "${project.buildDir}/docker" }
+    include "*"
+    exclude "*.original"
+}
+
+task buildDocker(type: com.bmuschko.gradle.docker.tasks.image.DockerBuildImage, dependsOn: 'copyDockerFiles') {
+    group = "Docker"
+    description = "Package application as Docker image"
+    inputDir = project.file("${project.buildDir}/docker")
+    tags = ["${project.name}:latest".toString(), "${project.name}:${project.version}".toString()]
+}

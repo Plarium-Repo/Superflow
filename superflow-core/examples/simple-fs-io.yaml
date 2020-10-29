@@ -1,0 +1,42 @@
+# 1. Read file system avro files.
+# 2. Process logic on SQL.
+# 3. Write result in file system
+---
+type: flow/etl
+name: etl-job
+registry:
+  type: registry/horton
+  url: ${registry.url}
+window:
+  type: window/fixed
+  size: 1 hour
+source:
+  type: source/fs/avro
+  name: read-transactions
+  location: ${source.location}
+  mapping:
+    - tag: transactions
+      schema: ${avro.schema.name}
+      path: ${dataset.path}
+processor:
+  type: processor/sql
+  outputTag: sql_result
+  name: transform-counts
+  sqlExpression: |
+    SELECT
+      userId as user_id,
+      sessionId as session_id,
+      COUNT(trasactionId) as thx_count
+    FROM transactions
+    GROUP BY userId, sessionId
+sink:
+  type: sink/fs/avro
+  name: write-counts
+  tempDir: ${output.tmp.location}
+  location:  ${output.location}
+  numOfShards: ${sink.num.shards}
+  createSchema: true
+  mapping:
+    - tag: sql_result
+      schema: ${output.schema.name}
+      path: ${output.path}

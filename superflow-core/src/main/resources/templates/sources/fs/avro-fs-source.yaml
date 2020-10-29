@@ -1,0 +1,17 @@
+---
+type: source/fs/avro
+name: ${source.name}
+location: ${source.location}
+allowNoStrict: ${allow.no.strict}
+registry:
+  type: registry/horton
+  url: ${registry.url}
+window:
+  type: window/fixed
+  size: ${window.size}
+mapping:
+  eventTime: ${event.time.field}
+  list:
+  - tag: ${tuple.tag}
+    schema: ${avro.schema.name}
+    path: ${dataset.path}

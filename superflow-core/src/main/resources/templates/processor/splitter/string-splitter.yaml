@@ -1,0 +1,10 @@
+---
+type: processor/splitter/string
+name: ${processor.name}
+inputField: ${input.field.name}
+outputField: ${output.field.name}
+splitter: ${string.splitter}
+dropInput: ${drop.input.field}
+castElement: ${cast.element.to}
+inputTag: ${input.tag}
+outputTag: ${output.tag}

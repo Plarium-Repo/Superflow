@@ -1,0 +1,16 @@
+---
+type: source/updated/jdbc
+name: ${source.name}
+dataSource:
+  url: ${jdbc.url}
+  username: ${jdbc.username}
+  password: ${jdbc.password}
+  driverJars: ${jdbc.driver.jars}
+  driverClass: ${jdbc.driver.class}
+  urlProperties: ${jdbc.url.properties}
+mapping:
+  eventTime: ${event.time.field}
+  duration: ${time.between.data.update}
+  list:
+    - tag: ${tuple.tag}
+      query: ${input.jdbc.query}

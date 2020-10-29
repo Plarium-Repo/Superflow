@@ -1,0 +1,6 @@
+---
+type: window/session
+gapSize: ${window.gap.size}
+allowedLateness: ${allowed.lateness}
+timeCombiner: ${window.time.combiner}
+accumulateWindow: ${accumulate.windows}

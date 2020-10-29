@@ -1,0 +1,53 @@
+---
+type: flow/etl
+name: etl-job
+window:
+  type: window/fixed
+  size: 1 hour
+  timeField: timestamp
+source:
+  type: source/fs/avro
+  name: read-transactions
+  location: ${source.location}
+  registry:
+    type: registry/horton
+    url: ${registry.url}
+  mapping:
+    - tag: transactions
+      path: ${dataset.directory}
+      schema: ${avro.schema.name}
+processor:
+  type: processor/sql
+  outputTag: sql_result
+  name: transform-counts
+  sqlExpression: |
+    SELECT
+      userId as user_id,
+      sessionId as session_id,
+      COUNT(trasactionId) as thx_count
+    FROM transactions
+    GROUP BY userId, sessionId
+sink:
+  type: sink/jdbc
+  name: write-counts
+  inputTag: sql_result
+  batchSize: 100
+  variables:
+    - order: 1
+      type: string
+      name: user_id
+    - order: 2
+      type: string
+      name: session_id
+    - order: 3
+      type: int
+      name: thx_count
+  dataSource:
+    url: ${jdbc.url}
+    username: ${jdbc.username}
+    password: ${jdbc.password}
+    driverJars: ${jdbc.jars}
+    driverClass: ${jdbc.driver.class}
+    properties: ${jdbc.properties}
+  sqlTemplate: |
+    insert into ${output.} values (?, ?, ?)

@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: superflow-web
+---
+
+server:
+  port: ${SERVER_PORT:8080}
+---
+
+endpoints.health.sensitive: false
+---
+
+management:
+  endpoint:
+    health:
+      show-details: "ALWAYS"
+  endpoints.web.exposure.include: "health,env,loggers,mappings,prometheus,metrics"
+---
+
+logging:
+  level:
+    com.plarium.south.superflow: ${LOG_LEVEL:INFO}
+    org.springframework.aop.interceptor.PerformanceMonitorInterceptor: ${LOG_LEVEL:INFO}
+---

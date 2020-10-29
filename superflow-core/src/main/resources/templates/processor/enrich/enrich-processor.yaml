@@ -1,0 +1,22 @@
+---
+type: processor/enrich
+name: ${processor.name}
+inputTag: ${input.dataset.name}
+outputTag: ${output.dataset.name}
+registry:
+  type: registry/horton
+  url: ${registry.url}
+enricher:
+  type: enricher/jdbc
+  sqlTemplate: ${sql.template}
+  variables:
+    - order: ${sql.var.order}
+      type: ${sql.var.type}
+      name: ${sql.var.name}
+  dataSource:
+    url: ${jdbc.url}
+    username: ${jdbc.username}
+    password: ${jdbc.password}
+    driverJars: ${jdbc.driver.jars}
+    driverClass: ${jdbc.driver.class}
+    urlProperties: ${jdbc.url.properties}

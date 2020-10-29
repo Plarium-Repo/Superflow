@@ -1,0 +1,10 @@
+---
+type: processor/transform/avro/enum
+name: ${processor.name}
+inputTag: ${input.dataset.name}
+outputTag: ${output.dataset.name}
+mappings:
+  - path: ${transform.enum.path_1}
+    conversionStrategy: ${transform.enum.path_1_conversion}
+  - path: ${transform.enum.path_2}
+    conversionStrategy: ${transform.enum.path_2_conversion}

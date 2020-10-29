@@ -1,0 +1,8 @@
+---
+type: source/gcp/bq
+name: ${source.name}
+mapping:
+  eventTime: ${event.time.field}
+  list:
+    - tag: ${tuple.tag}
+      query: ${input.bq.query}

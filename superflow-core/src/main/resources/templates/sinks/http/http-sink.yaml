@@ -1,0 +1,19 @@
+---
+type: sink/http
+name: ${sink.name}
+method: ${http.method}
+contentType: ${content.type}
+httpConfig:
+  numberOfRetries: ${number.of.retries}
+urlTemplate: http://${http.endpoint}/resource/%{eventId}
+mapping:
+  tag: ${tuple.tag}
+  eventTime: ${event.time}
+bodyFilter:
+  - ${body.filter}
+bodyTemplate: |
+  {
+    "uuid": %{uuid},
+    "data": %{data},
+    "timestamp": %{ts}
+  }

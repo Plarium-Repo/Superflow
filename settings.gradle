@@ -1,0 +1,7 @@
+rootProject.name = 'superflow'
+
+include(':superflow-core')
+project(':superflow-core').projectDir = file("superflow-core")
+
+include(':superflow-web')
+project(':superflow-web').projectDir = file("superflow-web")

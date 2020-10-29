@@ -1,0 +1,13 @@
+---
+type: source/hcat
+name: ${source.name}
+uri: ${hive.metastore.uris}
+mapping:
+  database: ${hive.database}
+  eventTime: ${event.time.field}
+  list:
+    - tag: ${output.dataset}
+      table: ${output.table}
+      filter: ${output.filer}
+      partitions:
+        - ${partition.column}

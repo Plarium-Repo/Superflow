@@ -1,0 +1,6 @@
+---
+type: window/fixed
+size: ${window.size}
+allowedLateness: ${allowed.lateness}
+timeCombiner: ${window.time.combiner}
+accumulateWindow: ${accumulate.windows}

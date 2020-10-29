@@ -1,0 +1,5 @@
+---
+type: processor/sql
+name: ${processor.name}
+sqlExpression: ${sql.template}
+outputTag: ${output.dataset.name}

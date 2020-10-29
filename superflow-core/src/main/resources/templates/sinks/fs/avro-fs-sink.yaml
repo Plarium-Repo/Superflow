@@ -1,0 +1,18 @@
+---
+type: sink/fs/avro
+name: ${sink.name}
+tempDir: ${sink.tmp.dir}
+location:  ${sink.output}
+numOfShards: ${sink.num.shards}
+createSchema: ${create.schema}
+registry:
+  type: registry/horton
+  url: ${registry.url}
+  schemaGroup: ${avro.schema.group}
+mapping:
+  eventTime: ${event.time.field}
+  list:
+  - tag: ${tuple.tag}
+    schema: ${avro.schema.name}
+    path: ${dataset.path}
+    inferSchema: ${infer.schema}

@@ -1,0 +1,7 @@
+---
+type: window/sliding
+size: ${window.size}
+newEvery: ${window.new.every}
+allowedLateness: ${allowed.lateness}
+timeCombiner: ${window.time.combiner}
+accumulateWindow: ${accumulate.windows}

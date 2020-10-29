@@ -1,0 +1,9 @@
+---
+type: sink/gcp/bq
+name: ${sink.name}
+mapping:
+  list:
+    - tag: ${tuple.tag}
+      allowCreate: ${allow.create.table}
+      writeMode: ${write.mode}
+      table: ${table.id}

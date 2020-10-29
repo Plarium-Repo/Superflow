@@ -1,0 +1,21 @@
+---
+type: source/kafka/json
+name: ${kafka.source.name}
+offset: ${kafka.offset.reset}
+autoCommit: ${kafka.auto.commit}
+delayCommit: ${kafka.delay.commit}
+groupId: ${kafka.group.id}
+bootstrap: ${kafka.bootstrap}
+registry:
+  type: registry/horton
+  url: ${registry.url}
+  versions:
+    schemaName: ${avro.schema.version}
+mapping:
+  eventTime: ${event.time.field}
+  list:
+    - tag: ${kafka.dataset.name}
+      schema: ${avro.schema.name}
+      topic: ${kafka.topic.name}
+kafkaConfig:
+  max.poll.records: ${kafka.max.poll.records}

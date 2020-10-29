@@ -1,0 +1,59 @@
+---
+type: flow/etl
+name: data-delivery-example
+window:
+  type: window/fixed
+  size: ${window.size}
+registry:
+  type: registry/horton
+  url: ${registry.url}
+  schemaGroup: events.group.name
+source:
+  type: source/kafka/avro
+  name: consume-events
+  offset: earliest
+  autoCommit: false
+  allowSchemaEvo: true
+  groupId: ${kafka.group.id}
+  bootstrap: ${kafka.bootstrap}
+  kafkaConfig:
+    max.poll.records: 5000
+  mapping:
+    eventTime: ${event.time.field}
+    list:
+      - tag: event1
+        schema: event1_schema
+        topic: event1_topic
+      - tag: event2
+        schema: event2_schema
+        topic: event2_topic
+      - tag: event3
+        schema: event3_schema
+        topic: event3_topic
+      - tag: event4
+        schema: event4_schema
+        topic: event4_topic
+      - tag: event5
+        schema: event5_schema
+        topic: event5_topic
+processor:
+  type: processor/proxy
+  name: proxy-pipeline
+sink:
+  type: sink/fs/avro
+  name: write-events
+  tempDir: gs://bucket/tmp
+  location:  gs://bucket/data
+  numOfShards: 1
+  mapping:
+    list:
+      - tag: event1
+        path: /event1
+      - tag: event2
+        path: /event2
+      - tag: event3
+        path: /event3
+      - tag: event4
+        path: /event4
+      - tag: event5
+        path: /event5

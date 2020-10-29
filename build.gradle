@@ -1,0 +1,31 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7")
+    }
+}
+
+subprojects {
+    version superflow_version
+    group 'com.plarium.south.superflow'
+
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'org.sonarqube'
+    apply from: "${projectDir}/../gradle/docker.gradle"
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    dependencies {
+        compile("org.projectlombok:lombok:1.18.4")
+        annotationProcessor("org.projectlombok:lombok:1.18.4")
+    }
+}

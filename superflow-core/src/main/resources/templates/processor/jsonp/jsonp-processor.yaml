@@ -1,0 +1,33 @@
+---
+type: processor/jsonp
+name: ${processor.name}
+inputTag: ${input.tag}
+outputTag: ${output.tag}
+outputSchema: ${output.schema}
+ignoreEmpty: ${ignore.empty}
+select: "${select}"
+pipeline:
+  - type: jsonp/ops/copy
+    ops:
+      - key: "${pipe.copy.key1}"
+        from: "${pipe.copy.from1}"
+        to: "${pipe.copy.to1}"
+
+  - type: jsonp/ops/rename
+    ops:
+      - path: "${pipe.rename.path}"
+        old: "${pipe.rename.old}"
+        new: "${pipe.rename.new}"
+
+  - type: jsonp/ops/del
+    ops:
+      - "${pipe.del.path}"
+
+  - type: jsonp/ops/const
+    ops:
+      - key: "${pipe.const.key}"
+        path: "${pipe.const.path}"
+        val: "${pipe.const.val}"
+
+  - type: jsonp/ops/select
+    select: "${pipe.select}"

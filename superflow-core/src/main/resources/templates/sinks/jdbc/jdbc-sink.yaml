@@ -1,0 +1,17 @@
+---
+type: sink/jdbc
+name: ${sink.name}
+inputTag: ${input.dataset.name}
+batchSize: ${write.batch.size}
+variables:
+  - order: ${sql.var.order}
+    type: ${sql.var.type}
+    name: ${sql.var.name}
+dataSource:
+  url: ${jdbc.url}
+  username: ${jdbc.username}
+  password: ${jdbc.password}
+  driverJars: ${jdbc.driver.jars}
+  driverClass: ${jdbc.driver.class}
+  urlProperties: ${jdbc.properties}
+sqlTemplate: ${sql.template}

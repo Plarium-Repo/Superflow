@@ -1,0 +1,88 @@
+---
+type: flow/etl
+name: multi-source-job
+registry:
+  type: registry/horton
+  url: ${registry.url}
+window:
+  type: window/fixed
+  size: 1 hour
+source:
+  type: source/list
+  list:
+    - type: source/fs/avro
+      name: read-transactions
+      location: ${source.location}
+      mapping:
+      - tag: transactions
+        schema: ${input1.schema.name}
+        path: /${curr.date}/**
+
+    - type: source/updated/jdbc
+      name: fetch-dict
+      dataSource:
+        username: username
+        password: password
+        url: jdbc:postgresql://server:port/database
+        driverClass: org.postgresql.Driver
+        driverJars: /gs://jars/driver.jar
+      mapping:
+        duration: 1 min
+        list:
+          - tag: realtime_currency_quotes
+            query: select * from currency_quotes.realtime
+
+    - type: source/gcp/bq
+      name: read-sessions
+      mapping:
+        - tag: sessions
+          query: |
+            select
+              *
+            FROM `${bq.session.table.id}`
+            WHERE dt = '${curr.date}'
+processor:
+  type: processor/sql
+  name: join-sessions-to-transactions
+  outputTag: sql_result
+  sqlExpression: |
+    WITH
+    transaction_view AS (
+      SELECT
+        userId as user_id,
+        sessionId as session_id,
+        trasactionId as trasaction_id
+        `value` as amount
+        FTS(`timestamp`, 'yyyy-MM-dd') AS dt
+      FROM transactions),
+
+    session_view AS (
+      SELECT
+        userId AS user_id,
+        sessionId AS session_id,
+        `timestamp` AS ts
+        ipAddres as ip_addres
+        networkId as network_id,
+      FROM sessions WHERE SessionState='Connect')
+
+    SELECT
+      session_view.user_id,
+      session_view.session_id,
+      session_view.ip_addres,
+      session_view.network_id,
+      transaction_view.trasaction_id,
+      transaction_view.amount,
+      transaction_view.dt
+    FROM session_connect
+    INNER JOIN session_disconnect
+    USING (user_id, session_id, dt)
+sink:
+  type: sink/fs/avro
+  name: write-counts
+  tempDir: ${output.tmp.location}
+  location:  ${output.location}
+  numOfShards: ${sink.num.shards}
+  mapping:
+    - tag: sql_result
+      schema: ${output.schema.name}
+      path: ${output.location}
